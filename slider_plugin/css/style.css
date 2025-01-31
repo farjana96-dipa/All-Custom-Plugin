@@ -1,0 +1,8 @@
+
+
+body{
+    background-color: red;
+}
+.slider .slider_inner ul{
+    list-style-type: none !important;
+}

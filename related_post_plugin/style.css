@@ -1,0 +1,85 @@
+.relpost ul{
+    display: flex;
+    list-style-type:none;
+    margin-right:0;
+    padding:30px 0px 0px 0px !important;
+    width:100%;
+}
+.relpost h2{
+    font-size:35px;
+    font-weight: 600;
+    line-height: 45px;
+    color: #000;
+}
+ .post_block{
+    float: left;
+    margin-right: 15px !important;
+    padding: 10px 10px 30px 10px;
+    border-radius: 15px;
+    transition: all 0.5s ease;
+    border: 2px solid rgb(213 204 204 / 20%);
+}
+
+.post_block:hover{
+    border: 2px solid rgb(213 204 204 / 50%);
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+.post_block img{
+    width:300px;
+    height: auto;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    cursor: pointer;
+}
+.post_block a{
+    font-size:22px;
+    font-weight: bold;
+    line-height: 30px;
+    color:#000;
+    margin-top:20px !important;
+}
+
+.relpost ul li a{
+    font-size:25px;
+    font-weight:bold;
+    line-height:35px;
+    margin-bottom:20px;
+    text-decoration:none;
+    cursor: pointer;
+}
+
+
+.post_block p{
+    font-size:16px;
+    font-weight: 400;
+    line-height: 30px;
+    margin-top:20px;
+}
+.post_block .read_btn{
+    background:red;
+    color:#fff;
+    padding:10px 45px;
+    border-radius: 12px;
+    font-size:16px;
+    font-weight: 600;
+    cursor: pointer;
+    border:2px solid red;
+    transition: all 0.3s ease;
+}
+
+.post_block .read_btn:hover{
+    background-color: transparent;
+    color:#000;
+    
+}
+
+.post_block .cat-link{
+    font-size:14px;
+    font-weight: 600;
+}
+
+.post_block .catlevel{
+    font-size:16px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
