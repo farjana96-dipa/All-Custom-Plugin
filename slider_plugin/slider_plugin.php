@@ -1,22 +1,9 @@
-<link rel="stylesheet" href="/path/to/jquery.bxslider.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-<script src="/path/to/jquery.bxslider.min.js"></script>
+
 
 <script>
-  $(document).ready(function(){
-    $('.slider').bxSlider({
-		mode: 'fade',
-      captions: true,
-      slideWidth: 600
-	});
-  });
+
 </script>
 
-<style>
-.slider .slider_inner ul{
-	list-style-type:none;
-}
-</style>
 
 <?php
 /*
@@ -47,52 +34,71 @@ public function __construct(){
 	add_shortcode('dp-slider',array($this,'dp_slider_shortcode'));
 }
 //DP Slider Shortcode
-public function dp_slider_shortcode(){
-	?>
-<div class="container text-center">
+
 	
-			<div class="slider">
-			<div class="row">
-				
-					<?php
+public function dp_slider_shortcode(){
 
-						$slider = new WP_Query(array(
-							'post_type' => 'dp_custom_slider',
-							'post_per_page' => 3
-						));
-						while($slider->have_posts()):
-							$slider->the_post();
 
-					?>
-							<div class="slider_inner">
-								<h2><?php the_title(); ?></h2>
-								<a href="<?php the_permalink(); ?>"><?php the_post_thumbnail();  ?></a>
-								<p><?php the_content(); ?></p>
-							</div>
+	?>
+	<div class="container text-center">
+	 <div class="row py-5 row3 owl-carousel event-row">
+        
+		<?php
+				$slider = new WP_Query(array(
+					'post_type' => 'dp_custom_slider',
+					'posts_per_page' => 6
+				));
 
-					<?php	endwhile; ?>
+			  
 			
+				if($slider->have_posts()) :
+				   
+					while($slider->have_posts()) : $slider->the_post();
 			
+			?>
+	<div class="item">
+
+
+		<div class="inner_container">
+			<div class="event_img">
+			   <?php echo the_post_thumbnail(); ?>
 			</div>
+			
+			<div class="title">
+				<h3><?php echo the_title(); ?></h3>
+			</div>
+
+			<div class="btn btn-primary">Submit Now</div>
+			
+			
+		
 		</div>
+	 
+	   
+
 	</div>
-</div>
-
-
-<?php
+	<?php endwhile;
+			endif; ?>
+ </div>
+		</div>
+    <?php
 }
+
+
 // CSS JS File Enqueue
 public function slider_css_js_file_calling(){
-	wp_enqueue_style('bootstrap',plugins_url('css/bootstrap.css',__FILE__));
-	wp_enqueue_style('jquery.bxslider.min',plugins_url('css/jquery.bxslider.min.css',__FILE__));
-	wp_enqueue_style('style',plugins_url('css/style.css',__FILE__),'','3.0.0','all');
+	wp_enqueue_style('custom',plugins_url('/css/custom.css',__FILE__));
+	wp_enqueue_style('bootstrap','https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css','','5.3.3');
+	wp_enqueue_style('owl.carousel.min',plugins_url('/css/owl.carousel.min.css',__FILE__));
+	wp_enqueue_style('owl.theme.default.min',plugins_url('/css/owl.theme.default.min.css',__FILE__));
+
 
 
 	//JS
 	
-	wp_enqueue_script('bootstrap.bundle',plugins_url('js/bootstrap.bundle.js',__FILE__),array('jquery'),null,true);
-	wp_enqueue_script('jquery.bxslider.min',plugins_url('js/jquery.bxslider.min.js',__FILE__));
-	wp_enqueue_script('script',plugins_url('js/script.js',__FILE__));
+	wp_enqueue_script('bootstrap.bundle',plugins_url('js/bootstrap.bundle.js',__FILE__),array('jquery'));
+	wp_enqueue_script('owl.carousel.min',plugins_url('js/owl.carousel.min.js',__FILE__),false);
+	wp_enqueue_script('custom',plugins_url('js/custom.js',__FILE__),false);
 } 
     // Register Custom Post Type
 public function dp_custom_slider() {

@@ -1,0 +1,12 @@
+
+
+
+.item ul{
+    list-style-type: none;
+}
+
+.slider_inner h2{
+    font-size:22px;
+    line-height: 32px;
+    font-weight:bold;
+}
