@@ -1,12 +1,23 @@
 
 
-
-.item ul{
-    list-style-type: none;
+.item .inner_container{
+    margin:0px 15px !important;
 }
 
-.slider_inner h2{
-    font-size:22px;
-    line-height: 32px;
-    font-weight:bold;
+.item .inner_container img{
+    border-radius: 15px;
+    width:100%;
+    
+}
+
+#dp_event_meta .inside input[type=date], input[type=datetime-local], input[type=datetime], input[type=email], input[type=month], input[type=number], input[type=password], input[type=search], input[type=tel], input[type=text], input[type=time], input[type=url], input[type=week]{
+    width:100% !important;
+}
+
+.owl-carousel .owl-item img{
+    width:350px;
+    border-radius: 15px;
+    object-fit: cover;
+    height: 400px !important;
+
 }
