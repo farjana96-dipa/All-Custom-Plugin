@@ -73,12 +73,12 @@ class Advance_plugin_Admin {
 		 * class.
 		 */
 
-		$valid_page = array("book_management","create_book","list_book");
+		$valid_page = array("book_management","create_book","list_book","create_book_shelf","list_book_shelf");
 		$page = isset($_REQUEST['page']) ? $_REQUEST['page'] : '';
 
 		if(in_array($page,$valid_page)){
-			wp_enqueue_style( $this->plugin_name, ADVANCE_PLUGIN_ADMIN_URL . 'css/advance_plugin-admin.css', array(), $this->version, 'all' );
-			wp_enqueue_style('bootstrap', ADVANCE_PLUGIN_ADMIN_URL.'assets/css/bootstrap.css', array(), $this->version, 'all');
+			wp_enqueue_style( 'advance_plugin-admin.css', plugin_dir_url(__FILE__) . 'css/advance_plugin-admin.css', array(), $this->version, 'all' );
+			wp_enqueue_style('bootstrap', 'https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css', array(), $this->version, 'all');
 			wp_enqueue_style('sweetalert',ADVANCE_PLUGIN_ADMIN_URL.'assets/css/sweetalert.css',array(),$this->version,'all');
 			wp_enqueue_style('jquery.dataTables.min',ADVANCE_PLUGIN_ADMIN_URL.'assets/css/jquery.dataTables.min.css',array(),$this->version,'all');
 		}
@@ -106,11 +106,28 @@ class Advance_plugin_Admin {
 		 * class.
 		 */
 
-		wp_enqueue_script( $this->plugin_name, ADVANCE_PLUGIN_ADMIN_URL . 'js/advance_plugin-admin.js', array( 'jquery' ), $this->version, false );
+
+		
+		wp_enqueue_script('jquery');
+
+		$valid_page = array("book_management","create_book","list_book","create_book_shelf","list_book_shelf");
+		$page = isset($_REQUEST['page']) ? $_REQUEST['page'] : '';
+
+		if(in_array($page,$valid_page)){
+		
 		wp_enqueue_script( 'bootstrap.bundle', ADVANCE_PLUGIN_ADMIN_URL . 'assets/js/bootstrap.bundle.js', array( 'jquery' ), $this->version, false );
 		wp_enqueue_script('sweetalert.min',ADVANCE_PLUGIN_ADMIN_URL.'assets/js/sweetalert.min.js',array('jquery'),$this->version,false);
 		wp_enqueue_script('jquery.dataTables.min',ADVANCE_PLUGIN_ADMIN_URL.'assets/js/jquery.dataTables.min.js',array('jquery'),$this->version,false);
 		wp_enqueue_script('jquery.validate.min',ADVANCE_PLUGIN_ADMIN_URL.'assets/js/jquery.validate.min.js',array('jquery'),$this->version,false);
+		wp_enqueue_script( $this->plugin_name, plugin_dir_url(__FILE__) . 'js/advance_plugin-admin.js', array( 'jquery' ), $this->version, false );
+		wp_localize_script($this->plugin_name,"add_book",array(
+			"ajax_url" => admin_url("admin-ajax.php"),
+			"author" => "Smart Coder",
+			"name" => "Farjana Dipa"
+		
+		));
+
+		}
 
 	}
 
@@ -143,11 +160,30 @@ class Advance_plugin_Admin {
 
 		add_submenu_page(
 			"book_management",
+			"Create Book Shelf",
+			"Create Book Shelf",
+			"manage_options",
+			"create_book_shelf",
+			array($this,"Create_Book_Shelf_Callback")
+		);
+
+
+		add_submenu_page(
+			"book_management",
 			"List Book",
 			"List Book",
 			"manage_options",
 			"list_book",
 			array($this,"List_Book_Callback")
+		);
+
+		add_submenu_page(
+			"book_management",
+			"List Book Shelf",
+			"List Book Shelf",
+			"manage_options",
+			"list_book_shelf",
+			array($this,"List_Book_Shelf_Callback")
 		);
 	}
 
@@ -179,11 +215,56 @@ class Advance_plugin_Admin {
 	
 
 	public function Create_Book_Callback(){
-		echo "Create Book";
+		
+
+		require_once(plugin_dir_path(__FILE__).'partials/template_create_book.php');
+		ob_start();
+		$template = ob_get_contents();
+
+		ob_end_clean();
+		echo $template;
 	}
 
 	public function List_Book_Callback(){
-		echo "List Book";
+		//echo "List Book";
+		require_once(plugin_dir_path(__FILE__).'partials/template_list_book.php');
+		ob_start();
+		$template = ob_get_contents();
+		ob_end_clean();
+		echo $template;
 	}
 
+
+	public function Create_Book_Shelf_Callback(){
+		//echo "Create Book Shelf";
+		require_once(plugin_dir_path(__FILE__).'partials/template_create_book_shelf.php');
+		ob_start();
+		$template = ob_get_contents();
+		ob_end_clean();
+		echo $template;
+	}
+
+	public function List_Book_Shelf_Callback(){
+		require_once(plugin_dir_path(__FILE__).'partials/template_list_book_shelf.php');
+		ob_start();
+		$template = ob_get_contents();
+		ob_end_clean();
+		echo $template;
+	}
+
+	public function First_Ajax_Request(){
+			$param = isset($_REQUEST['param']) ? $_REQUEST['param'] : '';
+			if(!empty($param)){
+				if($param == 'simple_ajax_form'){
+					echo json_encode(array(
+						'status' => 1,
+						'message' => 'first ajax call',
+						'data' => array(
+							'name' => 'Smart Coder',
+							'author' => 'Farjana Dipa'
+						)
+					));
+				}
+			}
+	}
 }

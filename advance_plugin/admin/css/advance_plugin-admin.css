@@ -2,3 +2,25 @@
  * All of the CSS for your admin-specific functionality should be
  * included in this file.
  */
+
+
+ #create_book{
+    margin:50px !important;
+ }
+
+ #create_book_shelf{
+    margin:50px !important;
+ }
+
+ #list_book{
+    margin:50px !important;
+ }
+
+ .panel .panel-heading{
+    padding:15px !important;
+ }
+ .panel .panel-heading button{
+    margin-top:-5px !important;
+    background-color: white;
+    color:black;
+ }
