@@ -30,6 +30,7 @@ class Advance_plugin_Admin {
 	 * @var      string    $plugin_name    The ID of this plugin.
 	 */
 	private $plugin_name;
+	private $activator;
 
 	/**
 	 * The version of this plugin.
@@ -51,6 +52,10 @@ class Advance_plugin_Admin {
 
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
+
+		//require_once plugin_dir_path( __FILE__ ) . '/includes/class-advance_plugin-activator.php';
+		//$activator = new Advance_plugin_Activator;
+		//$this->activator = new Advance_plugin_Activator;
 
 	}
 
@@ -245,15 +250,23 @@ class Advance_plugin_Admin {
 	}
 
 	public function List_Book_Shelf_Callback(){
+
+		global $wpdb;
+		$res = $wpdb->get_results("SELECT *FROM wp_book_shelf_table");
+
+
 		require_once(plugin_dir_path(__FILE__).'partials/template_list_book_shelf.php');
 		ob_start();
 		$template = ob_get_contents();
 		ob_end_clean();
 		echo $template;
+
+		
 	}
 
 	public function First_Ajax_Request(){
 			$param = isset($_REQUEST['param']) ? $_REQUEST['param'] : '';
+			//echo $param;
 			if(!empty($param)){
 				if($param == 'simple_ajax_form'){
 					echo json_encode(array(
@@ -265,6 +278,67 @@ class Advance_plugin_Admin {
 						)
 					));
 				}
+				else if($param=='create_book_shelf'){
+					print_r($_REQUEST);
+					$name = isset($_REQUEST['shelf_name']) ? $_REQUEST['shelf_name'] : '';
+					$capacity = isset($_REQUEST['shelf_capacity']) ? $_REQUEST['shelf_capacity'] : '';
+					$location = isset($_REQUEST['shelf_location']) ? $_REQUEST['shelf_location'] : '';
+					$status = isset($_REQUEST['shelf_status']) ? $_REQUEST['shelf_status'] : '';
+
+					global $wpdb;
+					//require_once(ABSPATH.'wp-admin/includes/upgrade.php');
+
+					$wpdb->insert(
+							'wp_book_shelf_table',
+						array(
+							'shelf_name' => $name,
+							'capacity' => $capacity,
+							'shelf_location' => $location,
+							'status' => $status
+						),
+						array('%s', '%d', '%s', '%d')
+					);
+
+					if($wpdb->insert_id > 0){
+						echo json_encode(array(
+							'status' => 1,
+							'message' => "Successfully Data Inserted"
+						));
+					}
+					else{
+						echo json_encode(array(
+							'status' => 0,
+							'message' => "Data insertion Failed !!"
+						));
+					}
+					
+				}
+				else if($param == 'delete_book_shelf'){
+					$id = isset($_REQUEST['id']) ? $_REQUEST['id'] : 0;
+					global $wpdb;
+					if($id > 0){
+						$wpdb->delete('wp_book_shelf_table',
+						array('id'=>$id));
+						echo json_encode(array(
+							'status' => 0,
+							'message' => 'Book Shelf Deleted Successfully'
+						));
+					}
+					else{
+						echo json_encode(array(
+							'status' => 0,
+							'message' => 'Invalid Delete Request'
+						));
+					}
+				}
+				else{
+					echo json_encode(array(
+						'status' => 0,
+						'message' => 'Invalid Request'
+					));
+				}
 			}
+
+			wp_die();
 	}
 }
