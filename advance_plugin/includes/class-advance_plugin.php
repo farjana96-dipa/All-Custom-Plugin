@@ -157,6 +157,8 @@ class Advance_plugin {
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 		$this->loader->add_action('admin_menu',$plugin_admin,'advanced_menu_section');
+
+		$this->loader->add_filter('page_template',$plugin_admin, 'dp_custom_page_template');
 		$this->loader->add_action('wp_ajax_admin_ajax_req',$plugin_admin,'First_Ajax_Request');
 
 	}

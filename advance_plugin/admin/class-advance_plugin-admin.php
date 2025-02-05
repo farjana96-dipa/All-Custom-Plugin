@@ -220,8 +220,11 @@ class Advance_plugin_Admin {
 	
 
 	public function Create_Book_Callback(){
-		
-
+		global $wpdb;
+		$res = $wpdb->get_results(
+			"SELECT *FROM wp_book_shelf_table"
+		);
+        
 		require_once(plugin_dir_path(__FILE__).'partials/template_create_book.php');
 		ob_start();
 		$template = ob_get_contents();
@@ -232,6 +235,9 @@ class Advance_plugin_Admin {
 
 	public function List_Book_Callback(){
 		//echo "List Book";
+		global $wpdb;
+		$res = $wpdb->get_results("SELECT *FROM wp_book_table",ARRAY_A);
+
 		require_once(plugin_dir_path(__FILE__).'partials/template_list_book.php');
 		ob_start();
 		$template = ob_get_contents();
@@ -264,6 +270,16 @@ class Advance_plugin_Admin {
 		
 	}
 
+	//Custom page template
+	public function dp_custom_page_template(){
+		global $post;
+		if($post->post_name == 'about-us'){
+			$page_template = plugin_dir_path(__FILE__).'public/partials/custom_page_template.php';
+		}
+		return $page_template;
+	}
+	//Ajax Requests
+
 	public function First_Ajax_Request(){
 			$param = isset($_REQUEST['param']) ? $_REQUEST['param'] : '';
 			//echo $param;
@@ -277,6 +293,46 @@ class Advance_plugin_Admin {
 							'author' => 'Farjana Dipa'
 						)
 					));
+				}
+				else if($param == 'create_book_form'){
+					print_r($_REQUEST);
+					$name = isset($_REQUEST['name']) ? $_REQUEST['name'] : '';
+					$desc = isset($_REQUEST['description']) ? $_REQUEST['description'] : '';
+					$amount = isset($_REQUEST['cost']) ? $_REQUEST['cost'] : '';
+					$language = isset($_REQUEST['language']) ? $_REQUEST['language'] : '';
+					$status = isset($_REQUEST['status']) ? $_REQUEST['status'] : '';
+					$img = isset($_REQUEST['book_cover_image']) ? $_REQUEST['book_cover_image'] : '';
+					$shelf_id = isset($_REQUEST['shelf_id']) ? $_REQUEST['shelf_id'] : '';
+
+					global $wpdb;
+					//require_once(ABSPATH.'wp-admin/includes/upgrade.php');
+
+					$wpdb->insert(
+							'wp_book_table',
+						array(
+							'name' => $name,
+							'amount' => $amount,
+							'description' => $desc,
+							'book_image' => $img,
+							'language' => $language,
+							'shelf_id' => $shelf_id,
+							'status' => $status
+						),
+						array('%s', '%d','%s','%s', '%s','%d', '%d')
+					);
+
+					if($wpdb->insert_id > 0){
+						echo json_encode(array(
+							'status' => 1,
+							'message' => "Successfully Book Inserted"
+						));
+					}
+					else{
+						echo json_encode(array(
+							'status' => 0,
+							'message' => "Book insertion Failed !!"
+						));
+					}
 				}
 				else if($param=='create_book_shelf'){
 					print_r($_REQUEST);
@@ -302,13 +358,13 @@ class Advance_plugin_Admin {
 					if($wpdb->insert_id > 0){
 						echo json_encode(array(
 							'status' => 1,
-							'message' => "Successfully Data Inserted"
+							'message' => "Successfully Book Shelf Inserted"
 						));
 					}
 					else{
 						echo json_encode(array(
 							'status' => 0,
-							'message' => "Data insertion Failed !!"
+							'message' => "Book Shelf insertion Failed !!"
 						));
 					}
 					
